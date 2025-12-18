@@ -1,0 +1,192 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// --------------------------------------------------------
+// 6.1 Multi-Tenant & Access
+// --------------------------------------------------------
+
+model Tenant {
+  id        String   @id @default(uuid())
+  slug      String   @unique // e.g., "yuye"
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users       TenantUser[]
+  properties  Property[]
+  orders      Order[]
+  holds       Hold[]
+  beds24Accounts Beds24Account[]
+}
+
+model User {
+  id        String   @id // Supabase Auth User ID
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+
+  tenants TenantUser[]
+}
+
+model TenantUser {
+  id        String   @id @default(uuid())
+  tenantId  String
+  userId    String
+  role      String   // owner, manager, staff
+  
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([tenantId, userId])
+}
+
+// --------------------------------------------------------
+// 6.2 Beds24 Mappings & Resources
+// --------------------------------------------------------
+
+model Beds24Account {
+  id          String   @id @default(uuid())
+  tenantId    String
+  apiKey      String
+  accountName String?  // e.g. "YuYe Subaccount"
+  
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+}
+
+model Property {
+  id        String   @id @default(uuid())
+  tenantId  String
+  beds24PropId String // External ID from Beds24
+  name      String
+  
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  roomTypes RoomType[]
+}
+
+model RoomType {
+  id        String   @id @default(uuid())
+  propertyId String
+  beds24RoomId String // External ID
+  name      String
+
+  property  Property @relation(fields: [propertyId], references: [id])
+  ratePlans RatePlan[]
+}
+
+model RatePlan {
+  id        String   @id @default(uuid())
+  roomTypeId String
+  beds24RateId String? // Optional, depending on Beds24 model
+  name      String
+
+  roomType  RoomType @relation(fields: [roomTypeId], references: [id])
+}
+
+model Mapping {
+  id        String   @id @default(uuid())
+  internalId String
+  externalId String
+  type       String // PROPERTY, ROOM, RATE
+}
+
+// --------------------------------------------------------
+// 6.3 Booking Core
+// --------------------------------------------------------
+
+model Hold {
+  id             String   @id @default(uuid())
+  tenantId       String
+  beds24ReservationId String? @unique // Unique for lookup
+  roomId         String
+  checkIn        DateTime
+  checkOut       DateTime
+  guests         Int
+  totalPrice     Float
+  status         String   // draft, hold, released, expired
+  expiresAt      DateTime
+  idempotencyKey String?  @unique
+  
+  // V1.1 Dual Channel
+  salesChannel       String // platform | brand_site | ota
+  salesChannelDetail String? // e.g. domain or ota name
+
+  tenant         Tenant   @relation(fields: [tenantId], references: [id])
+  createdAt      DateTime @default(now())
+
+  @@index([tenantId, status])
+  @@index([expiresAt])
+}
+
+model Order {
+  id             String   @id @default(uuid())
+  tenantId       String
+  beds24ReservationId String? @unique
+  source         String   // web, ota (Keep for backward compatibility or map to salesChannel)
+  status         String   // confirmed, cancelled, completed
+  
+  checkIn        DateTime
+  checkOut       DateTime
+  totalAmount    Float
+  currency       String   @default("TWD")
+
+  customerName   String
+  customerEmail  String
+  customerPhone  String?
+
+  // V1.1 Dual Channel
+  salesChannel       String // platform | brand_site | ota
+  salesChannelDetail String?
+
+  tenant         Tenant   @relation(fields: [tenantId], references: [id])
+  payments       Payment[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([tenantId, status])
+  @@index([tenantId, salesChannel])
+}
+
+model Payment {
+  id              String   @id @default(uuid())
+  orderId         String
+  amount          Float
+  status          String   // pending, success, failed
+  paymentIntentId String?  @unique
+  provider        String   // stripe, linepay, etc.
+  
+  order           Order    @relation(fields: [orderId], references: [id])
+  createdAt       DateTime @default(now())
+}
+
+// --------------------------------------------------------
+// 6.4 Sync & Logs
+// --------------------------------------------------------
+
+model SyncEvent {
+  id        String   @id @default(uuid())
+  tenantId  String?
+  entityId  String?  // OrderID, HoldID, etc.
+  entityType String  // ORDER, HOLD, WEBHOOK
+  action    String   // SYNC_OTA, CONFIRM_PAYMENT
+  status    String   // SUCCESS, FAILED
+  payload   String?  // JSON string
+  error     String?
+  retryCount Int     @default(0)
+  lastAttemptAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([status])
+  @@index([tenantId, createdAt])
+}

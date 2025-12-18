@@ -1,0 +1,85 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.16 [39m[90m/Users/MING/Sites/Booking-WEDO[39m
+
+[90mstdout[2m | test/flow.test.ts
+[22m[39mMockBeds24Provider initialized with Prisma persistence
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mGET /api/availability should return mock data
+[22m[39m<-- GET /api/availability?tenant=yuye&propertyIds=123&checkIn=2024-01-01&checkOut=2024-01-02
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mGET /api/availability should return mock data
+[22m[39m--> GET /api/availability?tenant=yuye&propertyIds=123&checkIn=2024-01-01&checkOut=2024-01-02 [32m200[0m 2ms
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mPOST /api/holds should create a hold
+[22m[39m<-- POST /api/holds
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mPOST /api/holds should create a hold
+[22m[39m--> POST /api/holds [32m201[0m 2s
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mPOST /api/holds with same idempotency should return same hold
+[22m[39m<-- POST /api/holds
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mPOST /api/holds with same idempotency should return same hold
+[22m[39m--> POST /api/holds [32m200[0m 253ms
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mPOST /api/webhooks/payment should confirm order
+[22m[39m<-- POST /api/webhooks/payment
+
+[90mstderr[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mPOST /api/webhooks/payment should confirm order
+[22m[39mTypeError: Cannot read properties of undefined (reading 'WEBHOOK_SECRET')
+    at [90m/Users/MING/Sites/Booking-WEDO/[39msrc/index.ts:172:26
+    at dispatch [90m(file:///Users/MING/Sites/Booking-WEDO/[39mnode_modules/[4m.pnpm[24m/hono@4.11.1/node_modules/[4mhono[24m/dist/compose.js:22:17[90m)[39m
+    at cors2 [90m(file:///Users/MING/Sites/Booking-WEDO/[39mnode_modules/[4m.pnpm[24m/hono@4.11.1/node_modules/[4mhono[24m/dist/middleware/cors/index.js:79:5[90m)[39m
+    at dispatch [90m(file:///Users/MING/Sites/Booking-WEDO/[39mnode_modules/[4m.pnpm[24m/hono@4.11.1/node_modules/[4mhono[24m/dist/compose.js:22:17[90m)[39m
+    at logger2 [90m(file:///Users/MING/Sites/Booking-WEDO/[39mnode_modules/[4m.pnpm[24m/hono@4.11.1/node_modules/[4mhono[24m/dist/middleware/logger/index.js:38:5[90m)[39m
+    at dispatch [90m(file:///Users/MING/Sites/Booking-WEDO/[39mnode_modules/[4m.pnpm[24m/hono@4.11.1/node_modules/[4mhono[24m/dist/compose.js:22:17[90m)[39m
+    at [90mfile:///Users/MING/Sites/Booking-WEDO/[39mnode_modules/[4m.pnpm[24m/hono@4.11.1/node_modules/[4mhono[24m/dist/hono-base.js:301:25
+    at [90m/Users/MING/Sites/Booking-WEDO/[39mtest/flow.test.ts:109:21
+    at [90mfile:///Users/MING/Sites/Booking-WEDO/[39mnode_modules/[4m.pnpm[24m/@vitest+runner@4.0.16/node_modules/[4m@vitest/runner[24m/dist/index.js:915:20
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mPOST /api/webhooks/payment should confirm order
+[22m[39m--> POST /api/webhooks/payment [31m500[0m 55ms
+
+[90mstderr[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mPOST /api/webhooks/payment should confirm order
+[22m[39mPayment Webhook Error: Internal Server Error
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mGET /api/admin/sync-events should show logs
+[22m[39m<-- GET /api/admin/sync-events
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mGET /api/admin/sync-events should show logs
+[22m[39m--> GET /api/admin/sync-events [32m200[0m 359ms
+
+ [31m❯[39m test/flow.test.ts [2m([22m[2m5 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 5330[2mms[22m[39m
+     [32m✓[39m GET /api/availability should return mock data[32m 22[2mms[22m[39m
+     [33m[2m✓[22m[39m POST /api/holds should create a hold [33m 2365[2mms[22m[39m
+     [32m✓[39m POST /api/holds with same idempotency should return same hold[32m 263[2mms[22m[39m
+[31m     [31m×[31m POST /api/webhooks/payment should confirm order[39m[32m 148[2mms[22m[39m
+     [33m[2m✓[22m[39m GET /api/admin/sync-events should show logs [33m 364[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m test/flow.test.ts[2m > [22mBooking Flow[2m > [22mPOST /api/webhooks/payment should confirm order
+[31m[1mAssertionError[22m: expected 500 to be 200 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 200[39m
+[31m+ 500[39m
+
+[36m [2m❯[22m test/flow.test.ts:[2m121:28[22m[39m
+    [90m119| [39m            console[33m.[39m[34merror[39m([32m"Payment Webhook Error:"[39m[33m,[39m [35mawait[39m res[33m.[39m[34mtext[39m())[33m;[39m
+    [90m120| [39m        }
+    [90m121| [39m        [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m200[39m)[33m;[39m
+    [90m   | [39m                           [31m^[39m
+    [90m122| [39m        [35mconst[39m data [33m=[39m [35mawait[39m res[33m.[39m[34mjson[39m()[33m;[39m
+    [90m123| [39m        [34mexpect[39m(data[33m.[39msuccess)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 18:29:26
+[2m   Duration [22m 5.55s[2m (transform 54ms, setup 0ms, import 119ms, tests 5.33s, environment 0ms)[22m
+

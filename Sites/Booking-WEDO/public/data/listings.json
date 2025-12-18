@@ -1,0 +1,24 @@
+{
+    "zone": "xiaoliuqiu",
+    "title": "小琉球專區",
+    "subtitle": "Booking-WEDO 首發專區｜已上架房源",
+    "items": [
+        {
+            "tenant": "yuye",
+            "slug": "yuye-shanyin",
+            "name": "YuYe ShanYin Camping",
+            "nameZh": "嶼野 山隱 露營區",
+            "type": "露營區",
+            "address": "屏東縣琉球鄉中正路206-38號",
+            "coverImage": "/properties/yuye/hero/01.jpg",
+            "coverAlt": "嶼野山隱園區空拍，草皮與景觀池全景",
+            "tags": [
+                "獨棟木屋",
+                "草皮",
+                "戶外景觀池",
+                "寵物友善（小型犬）"
+            ],
+            "href": "/l/yuye-shanyin/"
+        }
+    ]
+}

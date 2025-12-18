@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YuYe ShanYin | Booking-WEDO</title>
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+
+<body>
+
+    <main id="page-property-detail">
+        <!-- Main Content (Hidden when booking flow active? No, we overlay or toggle) -->
+        <div id="property-main">
+            <!-- HERO -->
+            <section id="property-hero" class="property-hero">
+                <div class="container">
+                    <a href="/" class="back-link">← 回到首頁</a>
+                    <div class="hero-text">
+                        <span class="badge">露營區</span>
+                        <h1>嶼野山隱 YuYe ShanYin Camping</h1>
+                        <p id="property-intro" class="sublead">載入中...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HIGHLIGHTS -->
+            <section id="highlights" class="section">
+                <div class="container">
+                    <div id="highlights-grid" class="grid-4">
+                        <!-- Rendered by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- INFO / ROOMS / POLICY -->
+            <div class="container grid-layout-property">
+                <div class="main-col">
+                    <!-- ROOMS -->
+                    <section id="room-types" class="section-part">
+                        <h3>房型介紹</h3>
+                        <div id="room-types-grid" class="room-list">
+                            <!-- Rendered by JS -->
+                        </div>
+                    </section>
+
+                    <!-- AVAILABILITY -->
+                    <section id="availability" class="section-part availability-section">
+                        <h3>查詢房況與預訂</h3>
+                        <div class="search-box">
+                            <div class="field-group">
+                                <label>入住日期 <input type="date" id="checkIn"></label>
+                                <label>退房日期 <input type="date" id="checkOut"></label>
+                                <label>人數 <select id="guests">
+                                        <option value="2">2 人</option>
+                                        <option value="4">4 人</option>
+                                    </select></label>
+                            </div>
+                            <button id="search-btn" class="btn btn-primary btn-block">查詢空房</button>
+                        </div>
+
+                        <!-- RESULTS CONTAINER -->
+                        <div id="property-availability" class="step-section">
+                            <div id="availability-results"></div>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="side-col">
+                    <!-- INFO -->
+                    <div class="info-card">
+                        <h4>基本資訊</h4>
+                        <p><strong>地址：</strong><span id="info-address"></span></p>
+                        <p><strong>入住：</strong><span id="info-checkin"></span></p>
+                        <p><strong>退房：</strong><span id="info-checkout"></span></p>
+                        <p class="eco-note"><small><span id="info-eco"></span></small></p>
+                    </div>
+
+                    <!-- PET POLICY -->
+                    <div class="info-card">
+                        <h4>寵物政策</h4>
+                        <div id="pet-policy-content">
+                            <!-- JS -->
+                        </div>
+                    </div>
+
+                    <!-- LINKS -->
+                    <div class="info-card">
+                        <h4>延伸閱讀</h4>
+                        <ul class="links-list">
+                            <li><a href="#">官方 LINE</a></li>
+                            <li><a href="#">交通指南</a></li>
+                            <li><a href="#">常見問題</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHECKOUT OVERLAY / SECTION -->
+        <section id="step-checkout" class="section container hidden">
+            <div class="checkout-card">
+                <h2>確認訂房</h2>
+                <div id="hold-info" class="hold-summary">
+                    <!-- JS populated -->
+                </div>
+
+                <div class="payment-simulation">
+                    <p>請於 <span id="timer" class="timer">15:00</span> 內完成付款</p>
+                    <div class="payment-method">
+                        <label><input type="radio" checked> 信用卡 (模擬)</label>
+                    </div>
+                    <button id="pay-btn" class="btn btn-primary btn-lg btn-block">模擬付款</button>
+                    <button class="btn btn-link" onclick="location.reload()">取消</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SUCCESS SECTION -->
+        <section id="step-success" class="section container hidden">
+            <div class="success-card">
+                <div class="icon">🎉</div>
+                <h2>預訂成功！</h2>
+                <div id="order-details">
+                    <!-- JS populated -->
+                </div>
+                <div class="actions">
+                    <a href="/" class="btn btn-primary">回到首頁</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script type="module" src="/assets/app.js"></script>
+    <script>
+        // Pre-fill dates for convenience
+        document.addEventListener('DOMContentLoaded', () => {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const dayAfter = new Date(tomorrow);
+            dayAfter.setDate(dayAfter.getDate() + 1);
+
+            if (document.getElementById('checkIn')) {
+                document.getElementById('checkIn').valueAsDate = tomorrow;
+                document.getElementById('checkOut').valueAsDate = dayAfter;
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,166 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.16 [39m[90m/Users/MING/Sites/Booking-WEDO[39m
+
+[90mstdout[2m | test/flow.test.ts
+[22m[39mMockBeds24Provider initialized
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mGET /api/availability should return mock data
+[22m[39m<-- GET /api/availability?tenant=yuye&propertyIds=123&checkIn=2024-01-01&checkOut=2024-01-02
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mGET /api/availability should return mock data
+[22m[39m--> GET /api/availability?tenant=yuye&propertyIds=123&checkIn=2024-01-01&checkOut=2024-01-02 [32m200[0m 2ms
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mPOST /api/holds should create a hold
+[22m[39m<-- POST /api/holds
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mPOST /api/holds should create a hold
+[22m[39m--> POST /api/holds [31m500[0m 59ms
+
+[90mstderr[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mPOST /api/holds should create a hold
+[22m[39mHolds Error: {"error":"\nInvalid `prisma.hold.create()` invocation in\n/Users/MING/Sites/Booking-WEDO/src/index.ts:106:40\n\n  103 // 3. Create Hold in DB\n  104 const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 mins\n  105 try {\n→ 106     const hold = await prisma.hold.create(\nForeign key constraint violated: `foreign key`"}
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mPOST /api/holds with same idempotency should return same hold
+[22m[39m<-- POST /api/holds
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mPOST /api/holds with same idempotency should return same hold
+[22m[39m--> POST /api/holds [31m500[0m 6ms
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mPOST /api/webhooks/payment should confirm order
+[22m[39m<-- POST /api/webhooks/payment
+
+[90mstderr[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mPOST /api/webhooks/payment should confirm order
+[22m[39mPrismaClientValidationError: 
+Invalid `prisma.hold.findUnique()` invocation in
+/Users/MING/Sites/Booking-WEDO/src/index.ts:152:36
+
+  149 }
+  150 
+  151 // 1. Find Hold
+→ 152 const hold = await prisma.hold.findUnique({
+        where: {
+          id: undefined,
+      ?   idempotencyKey?: String,
+      ?   AND?: HoldWhereInput | HoldWhereInput[],
+      ?   OR?: HoldWhereInput[],
+      ?   NOT?: HoldWhereInput | HoldWhereInput[],
+      ?   tenantId?: StringFilter | String,
+      ?   beds24ReservationId?: StringNullableFilter | String | Null,
+      ?   roomId?: StringFilter | String,
+      ?   checkIn?: DateTimeFilter | DateTime,
+      ?   checkOut?: DateTimeFilter | DateTime,
+      ?   guests?: IntFilter | Int,
+      ?   totalPrice?: FloatFilter | Float,
+      ?   status?: StringFilter | String,
+      ?   expiresAt?: DateTimeFilter | DateTime,
+      ?   createdAt?: DateTimeFilter | DateTime,
+      ?   tenant?: TenantRelationFilter | TenantWhereInput
+        }
+      })
+
+Argument `where` of type HoldWhereUniqueInput needs at least one of `id` or `idempotencyKey` arguments. Available options are marked with ?.
+    at wn [90m(/Users/MING/Sites/Booking-WEDO/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:29:1363[90m)[39m
+    at $n.handleRequestError [90m(/Users/MING/Sites/Booking-WEDO/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6958[90m)[39m
+    at $n.handleAndLogRequestError [90m(/Users/MING/Sites/Booking-WEDO/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6623[90m)[39m
+    at $n.request [90m(/Users/MING/Sites/Booking-WEDO/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:121:6307[90m)[39m
+    at l [90m(/Users/MING/Sites/Booking-WEDO/[39mnode_modules/[4m@prisma/client[24m/runtime/library.js:130:9633[90m)[39m
+    at [90m/Users/MING/Sites/Booking-WEDO/[39msrc/index.ts:152:18
+    at dispatch [90m(file:///Users/MING/Sites/Booking-WEDO/[39mnode_modules/[4mhono[24m/dist/compose.js:22:17[90m)[39m
+    at cors2 [90m(file:///Users/MING/Sites/Booking-WEDO/[39mnode_modules/[4mhono[24m/dist/middleware/cors/index.js:79:5[90m)[39m
+    at dispatch [90m(file:///Users/MING/Sites/Booking-WEDO/[39mnode_modules/[4mhono[24m/dist/compose.js:22:17[90m)[39m
+    at logger2 [90m(file:///Users/MING/Sites/Booking-WEDO/[39mnode_modules/[4mhono[24m/dist/middleware/logger/index.js:38:5[90m)[39m {
+  clientVersion: [32m'5.22.0'[39m
+}
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mPOST /api/webhooks/payment should confirm order
+[22m[39m--> POST /api/webhooks/payment [31m500[0m 5ms
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mGET /api/admin/sync-events should show logs
+[22m[39m<-- GET /api/admin/sync-events
+
+[90mstdout[2m | test/flow.test.ts[2m > [22m[2mBooking Flow[2m > [22m[2mGET /api/admin/sync-events should show logs
+[22m[39m--> GET /api/admin/sync-events [32m200[0m 3ms
+
+ [31m❯[39m test/flow.test.ts [2m([22m[2m5 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[32m 108[2mms[22m[39m
+     [32m✓[39m GET /api/availability should return mock data[32m 24[2mms[22m[39m
+[31m     [31m×[31m POST /api/holds should create a hold[39m[32m 65[2mms[22m[39m
+[31m     [31m×[31m POST /api/holds with same idempotency should return same hold[39m[32m 6[2mms[22m[39m
+[31m     [31m×[31m POST /api/webhooks/payment should confirm order[39m[32m 6[2mms[22m[39m
+[31m     [31m×[31m GET /api/admin/sync-events should show logs[39m[32m 4[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m test/flow.test.ts[2m > [22mBooking Flow[2m > [22mPOST /api/holds should create a hold
+[31m[1mAssertionError[22m: expected 500 to be 201 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 201[39m
+[31m+ 500[39m
+
+[36m [2m❯[22m test/flow.test.ts:[2m35:28[22m[39m
+    [90m 33| [39m        }
+    [90m 34| [39m
+    [90m 35| [39m        [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m201[39m)[33m;[39m
+    [90m   | [39m                           [31m^[39m
+    [90m 36| [39m        [35mconst[39m data [33m=[39m [35mawait[39m res[33m.[39m[34mjson[39m()[33m;[39m
+    [90m 37| [39m        [34mexpect[39m(data[33m.[39mid)[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m test/flow.test.ts[2m > [22mBooking Flow[2m > [22mPOST /api/holds with same idempotency should return same hold
+[31m[1mAssertionError[22m: expected 500 to be 200 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 200[39m
+[31m+ 500[39m
+
+[36m [2m❯[22m test/flow.test.ts:[2m59:28[22m[39m
+    [90m 57| [39m        })[33m;[39m
+    [90m 58| [39m
+    [90m 59| [39m        [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m200[39m)[33m;[39m
+    [90m   | [39m                           [31m^[39m
+    [90m 60| [39m        [35mconst[39m data [33m=[39m [35mawait[39m res[33m.[39m[34mjson[39m()[33m;[39m
+    [90m 61| [39m        [34mexpect[39m(data[33m.[39mid)[33m.[39m[34mtoBe[39m(holdId)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m test/flow.test.ts[2m > [22mBooking Flow[2m > [22mPOST /api/webhooks/payment should confirm order
+[31m[1mAssertionError[22m: expected 500 to be 200 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 200[39m
+[31m+ 500[39m
+
+[36m [2m❯[22m test/flow.test.ts:[2m76:28[22m[39m
+    [90m 74| [39m        })[33m;[39m
+    [90m 75| [39m
+    [90m 76| [39m        [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m200[39m)[33m;[39m
+    [90m   | [39m                           [31m^[39m
+    [90m 77| [39m        [35mconst[39m data [33m=[39m [35mawait[39m res[33m.[39m[34mjson[39m()[33m;[39m
+    [90m 78| [39m        [34mexpect[39m(data[33m.[39msuccess)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m test/flow.test.ts[2m > [22mBooking Flow[2m > [22mGET /api/admin/sync-events should show logs
+[31m[1mAssertionError[22m: expected undefined to be defined[39m
+[36m [2m❯[22m test/flow.test.ts:[2m89:27[22m[39m
+    [90m 87| [39m        [90m// Should have CREATE_HOLD (Success), CONFIRM_ORDER (Success)[39m
+    [90m 88| [39m        const holdEvent = data.find((e: any) => e.action === 'CREATE_H…
+    [90m 89| [39m        [34mexpect[39m(holdEvent)[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m   | [39m                          [31m^[39m
+    [90m 90| [39m        [34mexpect[39m(holdEvent[33m.[39mstatus)[33m.[39m[34mtoBe[39m([32m'SUCCESS'[39m)[33m;[39m
+    [90m 91| [39m    })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 14:29:22
+[2m   Duration [22m 450ms[2m (transform 136ms, setup 0ms, import 189ms, tests 108ms, environment 0ms)[22m
+

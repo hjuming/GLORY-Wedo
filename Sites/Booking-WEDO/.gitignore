@@ -1,0 +1,7 @@
+node_modules
+.wrangler
+.env
+dist
+*.db
+*.db-journal
+test-results

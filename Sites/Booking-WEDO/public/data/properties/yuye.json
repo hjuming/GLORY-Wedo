@@ -1,0 +1,67 @@
+{
+    "tenant": "yuye",
+    "slug": "yuye-shanyin",
+    "name": "YuYe ShanYin Camping",
+    "nameZh": "嶼野山隱 YuYe ShanYin Camping",
+    "address": "屏東縣琉球鄉中正路206-38號",
+    "heroImages": [
+        "/properties/yuye/hero/01.jpg",
+        "/properties/yuye/hero/05.jpg",
+        "/properties/yuye/hero/02.jpg",
+        "/properties/yuye/hero/04.jpg",
+        "/properties/yuye/hero/09.jpg",
+        "/properties/yuye/hero/10.jpg",
+        "/properties/yuye/hero/13.jpg"
+    ],
+    "intro": "嶼野山隱位於屏東縣琉球鄉，主打露營風格木屋，提供獨棟的住宿空間，讓旅客享受不被打擾的隱密性。園區擁有戶外景觀池與大片綠草皮，並且是寵物友善的住宿環境。",
+    "highlights": [
+        "獨棟露營風格木屋，保有隱私且互不干擾",
+        "戶外景觀池與寬廣綠草皮，適合放空與團體同遊",
+        "寵物友善（僅限小型犬），可加購入住並遵守規範",
+        "位於屏東縣琉球鄉，享受小琉球自然風光"
+    ],
+    "checkIn": "15:00 起（可先至民宿停車場放行李）",
+    "checkOut": "11:00 前（逾時每半小時 NT$300）",
+    "ecoNote": "為響應環保，民宿不提供牙刷、牙膏、小毛巾等一次性備品。",
+    "petPolicy": {
+        "fee": "NT$600／隻",
+        "limit": "僅限小型犬",
+        "note": "請於訂單備註，並遵守不上床、不用浴巾擦拭、不在房內吹毛或梳毛、不可獨留房內等規定。",
+        "rules": [
+            "不上床",
+            "不使用浴巾擦拭",
+            "不在房內吹毛或梳毛",
+            "不可獨留房內",
+            "外出請牽繩或置外出籠"
+        ]
+    },
+    "roomTypes": [
+        {
+            "code": "garden-double",
+            "name": "園景雙人房",
+            "beds": "1 張標準雙人床",
+            "capacity": "2 人",
+            "note": ""
+        },
+        {
+            "code": "garden-quad",
+            "name": "園景四人房",
+            "beds": "2 張標準雙人床",
+            "capacity": "4 人",
+            "note": ""
+        },
+        {
+            "code": "garden-five-xiaohua",
+            "name": "園景五人房（小花）",
+            "beds": "2 張標準雙人床＋1 張單人床",
+            "capacity": "4–5 人",
+            "note": "專屬衛浴在房外（雅房）。4人/5人方案為同一房源，僅入住人數不同。"
+        }
+    ],
+    "links": [
+        {
+            "label": "官方 LINE",
+            "value": "@356aoexy"
+        }
+    ]
+}
