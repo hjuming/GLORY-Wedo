@@ -1,15 +1,14 @@
-# 對齊《御之旅 MVP 開發規劃建議書 v2》第五節
-# push main / develop → Cloudflare Pages；PR → main 觸發建置驗證
-name: Deploy to Cloudflare Pages
+# 御之旅 MVP — CI 驗證
+# 部署由 Cloudflare Pages 官方 Git 整合自動處理（OAuth 連結 GitHub）
+# 此 workflow 僅於 PR 時驗證 build 是否通過
+name: CI Build Check
 
 on:
-  push:
-    branches: [main, develop]
   pull_request:
     branches: [main]
 
 jobs:
-  build-and-deploy:
+  build-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,22 +23,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build for Cloudflare Pages
-        run: npm run pages:build
+      - name: Build verification
+        run: npm run build
         env:
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          NEXT_PUBLIC_APP_URL: ${{ secrets.APP_URL }}
+          NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder
+          NEXT_PUBLIC_APP_URL: https://placeholder.pages.dev
           NEXT_PUBLIC_APP_NAME: 御之旅
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-
-      - name: Deploy to Cloudflare Pages
-        if: github.event_name == 'push'
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          projectName: miidokoro-mvp
-          directory: .vercel/output/static
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref_name }}
