@@ -4,14 +4,14 @@
  * ② Tee-time Booking（球場預約表）
  * 雙語 Header（日文 + 中文/英文）
  */
-import { jsPDF } from 'jspdf';
+import type { jsPDF as JsPDFType } from 'jspdf';
 
 // ── 共用 ──
 const MARGIN = 15;
 const W = 210;
 const CONTENT_W = W - MARGIN * 2;
 
-function drawHeader(doc: jsPDF, title: string, titleJa: string, tourName: string, date: string) {
+function drawHeader(doc: JsPDFType, title: string, titleJa: string, tourName: string, date: string) {
   let y = MARGIN;
 
   // Logo bar
@@ -49,7 +49,7 @@ function drawHeader(doc: jsPDF, title: string, titleJa: string, tourName: string
   return y;
 }
 
-function drawTableHeader(doc: jsPDF, y: number, headers: { label: string; labelJa: string; x: number; w: number }[]) {
+function drawTableHeader(doc: JsPDFType, y: number, headers: { label: string; labelJa: string; x: number; w: number }[]) {
   doc.setFillColor(248, 250, 252);
   doc.rect(MARGIN, y - 4, CONTENT_W, 12, 'F');
 
@@ -92,7 +92,8 @@ export interface RoomingListData {
   }[];
 }
 
-export function generateRoomingListPDF(data: RoomingListData): void {
+export async function generateRoomingListPDF(data: RoomingListData): Promise<void> {
+  const { jsPDF } = await import('jspdf');
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
   let y = drawHeader(doc, 'Rooming List', '宿泊者リスト / 分房表', data.tourName, `${data.checkIn} ~ ${data.checkOut} (${data.nights} nights)`);
@@ -203,7 +204,8 @@ export interface TeeTimeBookingData {
   groups: TeeTimeGroup[];
 }
 
-export function generateTeeTimeBookingPDF(data: TeeTimeBookingData): void {
+export async function generateTeeTimeBookingPDF(data: TeeTimeBookingData): Promise<void> {
+  const { jsPDF } = await import('jspdf');
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
   let y = drawHeader(doc, 'Tee-time Booking', 'ティータイム予約 / プレーヤーリスト', data.tourName, data.playDate);

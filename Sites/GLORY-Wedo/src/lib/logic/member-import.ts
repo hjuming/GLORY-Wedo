@@ -1,8 +1,8 @@
 /**
  * 御之旅 — 團員 Excel/CSV 批量匯入引擎
  * Task 5.1: 支援 xlsx 解析、欄位映射、自動分房預覽
+ * 注意: xlsx 使用動態 import 避免 Cloudflare Edge SSR 時 WebAssembly 錯誤
  */
-import * as XLSX from 'xlsx';
 
 export interface ImportedMember {
   id: number;
@@ -68,8 +68,10 @@ function parseRoom(val: string): 'single' | 'double' {
 
 /**
  * Parse Excel/CSV file buffer into structured member data
+ * 使用動態 import 載入 xlsx（避免 Edge SSR 問題）
  */
-export function parseExcelMembers(buffer: ArrayBuffer): ImportResult {
+export async function parseExcelMembers(buffer: ArrayBuffer): Promise<ImportResult> {
+  const XLSX = await import('xlsx');
   const errors: string[] = [];
   const workbook = XLSX.read(buffer, { type: 'array' });
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -145,7 +147,6 @@ export function autoAssignRooms(members: ImportedMember[]): RoomAssignment[] {
   const femaleDoubles = doubles.filter(m => m.gender === 'F');
 
   const pairUp = (list: ImportedMember[]) => {
-    // Sort by flight to keep same-flight people together
     const sorted = [...list].sort((a, b) => a.flight.localeCompare(b.flight));
     for (let i = 0; i < sorted.length; i += 2) {
       if (sorted[i + 1]) {
@@ -165,7 +166,8 @@ export function autoAssignRooms(members: ImportedMember[]): RoomAssignment[] {
 /**
  * Parse CSV string as fallback
  */
-export function parseCsvMembers(csvText: string): ImportResult {
+export async function parseCsvMembers(csvText: string): Promise<ImportResult> {
+  const XLSX = await import('xlsx');
   const workbook = XLSX.read(csvText, { type: 'string' });
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
   const buffer = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });

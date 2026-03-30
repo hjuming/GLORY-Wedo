@@ -2,8 +2,6 @@
  * 御之旅 — A4 PDF 落地指南生成器
  * Task 5.2: 使用 jsPDF 產生 300dpi 品質的單頁行程單
  */
-import { jsPDF } from 'jspdf';
-
 export interface PDFActionStop {
   type: string;
   name: string;
@@ -40,7 +38,8 @@ const TYPE_ICONS: Record<string, string> = {
 /**
  * Generate A4 PDF action guide and trigger download
  */
-export function generateActionGuidePDF(data: PDFGuideData): void {
+export async function generateActionGuidePDF(data: PDFGuideData): Promise<void> {
+  const { jsPDF } = await import('jspdf');
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',

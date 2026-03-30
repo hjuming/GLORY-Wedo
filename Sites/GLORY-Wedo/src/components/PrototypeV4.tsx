@@ -881,7 +881,7 @@ function MembersModule() {
     setImporting(true);
     try {
       const buffer = await file.arrayBuffer();
-      const result = parseExcelMembers(buffer);
+      const result = await parseExcelMembers(buffer);
       setImportResult(result);
       if (result.members.length > 0) {
         setMembers(result.members);
@@ -1148,9 +1148,8 @@ function SupplierPDFModule() {
   const [genType, setGenType] = useState<string | null>(null);
   const members = DEFAULT_MEMBERS;
 
-  const handleRoomingList = useCallback(() => {
+  const handleRoomingList = useCallback(async () => {
     setGenType('rooming');
-    // 從 members 生成 rooming data
     const rooms: { roomNo: string; type: string; guests: { name: string; nameEn: string; gender: string }[] }[] = [];
     const doubles = members.filter(m => m.room === 'double');
     for (let i = 0; i < doubles.length; i += 2) {
@@ -1168,7 +1167,7 @@ function SupplierPDFModule() {
       rooms.push({ roomNo: String(300 + i), type: 'single', guests: [{ name: s.name, nameEn: s.nameEn, gender: s.gender }] });
     });
 
-    generateRoomingListPDF({
+    await generateRoomingListPDF({
       tourName: '北海道高爾夫美食之旅',
       hotelName: '御居所 HOUSE HOTEL（札幌）',
       checkIn: '2026-08-02',
@@ -1181,9 +1180,8 @@ function SupplierPDFModule() {
     setTimeout(() => setGenType(null), 1500);
   }, [members]);
 
-  const handleTeeTimeBooking = useCallback(() => {
+  const handleTeeTimeBooking = useCallback(async () => {
     setGenType('teetime');
-    // 從 members 生成 golf groups
     const sorted = [...members].sort((a, b) => (a.handicap || 99) - (b.handicap || 99));
     const groups: { groupNo: number; course: string; teeTime: string; players: { name: string; nameEn: string; handicap: number }[] }[] = [];
     for (let i = 0; i < sorted.length; i += 4) {
@@ -1196,7 +1194,7 @@ function SupplierPDFModule() {
       });
     }
 
-    generateTeeTimeBookingPDF({
+    await generateTeeTimeBookingPDF({
       tourName: '北海道高爾夫美食之旅',
       courseName: '由仁東武 Golf Club',
       courseNameJa: '由仁東武ゴルフクラブ',
@@ -1397,10 +1395,10 @@ function ActionGuideModule() {
     ]
   };
 
-  const handleDownloadPDF = useCallback(() => {
+  const handleDownloadPDF = useCallback(async () => {
     setPdfLoading(true);
     try {
-      generateActionGuidePDF({
+      await generateActionGuidePDF({
         tourName: mockData.tourName,
         pax: mockData.pax,
         days: mockData.days,
