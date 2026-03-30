@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * 御之旅 Phase 6.1 — 登入頁面
  * Supabase Auth: Email + Password / Magic Link
