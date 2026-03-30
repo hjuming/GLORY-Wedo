@@ -1,5 +1,6 @@
 'use client';
 
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 /**
@@ -114,7 +115,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const supabase = supabaseUrl ? createClient(supabaseUrl, supabaseKey) : null;
+  const supabase = (supabaseUrl && supabaseKey) ? createClient(supabaseUrl, supabaseKey) : null;
 
   async function handlePasswordLogin(e: React.FormEvent) {
     e.preventDefault();
