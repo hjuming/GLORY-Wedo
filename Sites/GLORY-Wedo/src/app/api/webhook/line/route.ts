@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 import { calculateQuoteV2, QuotationParams } from '@/lib/logic/itinerary-costs';
 import { analyzeQuotationAI } from '@/lib/logic/ai-advisor';
 import { generateQuoteFlex } from '@/lib/logic/line-flex';
+
+export const runtime = 'edge';
 
 const CHANNEL_SECRET = process.env.LINE_CHANNEL_SECRET || '';
 const CHANNEL_ACCESS_TOKEN = process.env.LINE_CHANNEL_ACCESS_TOKEN || '';
@@ -21,7 +22,7 @@ export async function POST(req: NextRequest) {
     const signature = req.headers.get('x-line-signature') || '';
 
     // 1. 驗證簽章
-    if (!verifySignature(body, signature)) {
+    if (!(await verifySignature(body, signature))) {
       return new NextResponse('Invalid signature', { status: 401 });
     }
 
@@ -47,13 +48,19 @@ export async function POST(req: NextRequest) {
 }
 
 /**
- * 驗證 LINE 簽章
+ * 驗證 LINE 簽章 (Web Crypto API — Edge Runtime 相容)
  */
-function verifySignature(body: string, signature: string): boolean {
-  const hash = crypto
-    .createHmac('sha256', CHANNEL_SECRET)
-    .update(body)
-    .digest('base64');
+async function verifySignature(body: string, signature: string): Promise<boolean> {
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(CHANNEL_SECRET),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  const sig = await crypto.subtle.sign('HMAC', key, encoder.encode(body));
+  const hash = btoa(String.fromCharCode(...new Uint8Array(sig)));
   return hash === signature;
 }
 
