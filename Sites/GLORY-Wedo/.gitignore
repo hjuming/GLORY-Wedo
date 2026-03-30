@@ -1,0 +1,24 @@
+# dependencies
+node_modules
+.pnp
+.pnp.js
+
+# next / cloudflare pages local adapter output
+.next
+.vercel
+out
+
+# env
+.env
+.env.local
+.env.*.local
+
+# debug / os
+npm-debug.log*
+.DS_Store
+
+# typescript
+*.tsbuildinfo
+
+# vercel
+.vercel

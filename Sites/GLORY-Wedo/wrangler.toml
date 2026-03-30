@@ -1,0 +1,12 @@
+# 對齊《御之旅 MVP 開發規劃建議書 v2》第六節
+# Cloudflare Dashboard 設定 Production / Preview 環境變數（勿將 secret 寫入此檔）
+
+name = "miidokoro-mvp"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+[env.production]
+# 機密變數於 Cloudflare Pages → Settings → Environment variables 設定
+
+[env.preview]
